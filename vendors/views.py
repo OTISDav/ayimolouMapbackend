@@ -7,7 +7,7 @@ from math import radians, sin, cos, sqrt, atan2
 
 
 def calculate_distance(lat1, lon1, lat2, lon2):
-    """Calcule la distance entre deux points GPS (en km)."""
+    ##Calcule  d la distance entre deux points GPS (en km}
     R = 6371.0
     lat1_r, lon1_r, lat2_r, lon2_r = map(radians, [lat1, lon1, lat2, lon2])
     dlon = lon2_r - lon1_r
@@ -18,14 +18,14 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 
 
 class VendorListView(generics.ListAPIView):
-    """Liste de tous les vendeurs (visibles sur la carte)."""
+    ##Liste de tous les vendeurs (visibles sur la carte)
     queryset = Vendor.objects.filter(verified=True, available=True)
     serializer_class = VendorSerializer
     permission_classes = [permissions.AllowAny]
 
 
 class AddVendorView(generics.CreateAPIView):
-    """Ajout d’un vendeur (doit être connecté)."""
+    ##Ajout d’un vendeur (doit être connecté)
     serializer_class = VendorSerializer
     permission_classes = [permissions.IsAuthenticated]
 
