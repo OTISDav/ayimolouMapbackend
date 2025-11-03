@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from .models import Vendor
 from .serializers import VendorSerializer
 from rest_framework.response import Response
@@ -31,6 +31,19 @@ class AddVendorView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(
+            {
+                "message": "Vendeur ajouté avec succès",
+                "data": serializer.data
+            },
+            status=status.HTTP_201_CREATED
+        )
+
 
 
 class NearbyVendorsView(APIView):

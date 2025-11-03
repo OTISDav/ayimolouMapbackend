@@ -1,9 +1,12 @@
 from django.db import models
 from django.conf import settings
+from cloudinary.models import CloudinaryField
 
 class Vendor(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    # document = models.FileField(upload_to='documents')
+    photo = CloudinaryField(resource_type="raw")
     phone = models.CharField(max_length=20)
     latitude = models.FloatField()
     longitude = models.FloatField()
