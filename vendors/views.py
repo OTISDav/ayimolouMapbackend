@@ -4,6 +4,8 @@ from .serializers import VendorSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from math import radians, sin, cos, sqrt, atan2
+import cloudinary.uploader
+
 
 
 def calculate_distance(lat1, lon1, lat2, lon2):
@@ -24,13 +26,20 @@ class VendorListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
 
+
 class AddVendorView(generics.CreateAPIView):
-    ##Ajout d’un vendeur (doit être connecté)
     serializer_class = VendorSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        photo = self.request.FILES.get('photo')
+
+        # Upload manuel vers Cloudinary
+        upload_result = cloudinary.uploader.upload(photo, resource_type="image")
+        file_url = upload_result.get('secure_url')
+
+        # Sauvegarde avec URL Cloudinary
+        serializer.save(user=self.request.user, photo=file_url)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
