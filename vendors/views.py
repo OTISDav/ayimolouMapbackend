@@ -47,14 +47,14 @@ class AddVendorView(generics.CreateAPIView):
 
 
 class NearbyVendorsView(APIView):
-    """Retourne les vendeurs proches d’une position GPS."""
+    ##Retourne les vendeurs proches d’une position GPS
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
         try:
             lat = float(request.query_params.get("lat"))
             lon = float(request.query_params.get("lon"))
-            radius = float(request.query_params.get("radius", 3))  # km par défaut
+            radius = float(request.query_params.get("radius", 5))  # km par défaut
         except (TypeError, ValueError):
             return Response({"error": "Paramètres lat/lon invalides"}, status=400)
 
