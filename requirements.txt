@@ -7,3 +7,4 @@ django-cors-headers
 python-dotenv
 Pillow
 cloudinary
+dj_database_url

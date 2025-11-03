@@ -1,5 +1,7 @@
 from pathlib import Path
 from datetime import timedelta
+import dj_database_url
+import cloudinary
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -58,12 +60,22 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ayimolou.wsgi.application'
 
 # Base de données
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+#NeonDb
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default='postgresql://neondb_owner:npg_qEck9xSOz0aT@ep-silent-rain-ad1fdx3s-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+        conn_max_age=600
+    )
 }
+
 
 # Authentification
 AUTH_USER_MODEL = 'accounts.CustomUser'
