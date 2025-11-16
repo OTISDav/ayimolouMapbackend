@@ -87,6 +87,9 @@ cloudinary.config(
 )
 
 
+
+
+
 # Authentification
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
