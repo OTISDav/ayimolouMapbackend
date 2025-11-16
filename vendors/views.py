@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from math import radians, sin, cos, sqrt, atan2
 import cloudinary.uploader
-
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 
 def calculate_distance(lat1, lon1, lat2, lon2):
@@ -29,7 +30,7 @@ class VendorListView(generics.ListAPIView):
 
 class AddVendorView(generics.CreateAPIView):
     serializer_class = VendorSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def perform_create(self, serializer):
         photo = self.request.FILES.get('photo')
@@ -39,7 +40,12 @@ class AddVendorView(generics.CreateAPIView):
         file_url = upload_result.get('secure_url')
 
         # Sauvegarde avec URL Cloudinary
-        serializer.save(user=self.request.user, photo=file_url)
+        # serializer.save(user=self.request.user, photo=file_url)
+
+        if self.request.user.is_authenticated:
+            serializer.save(user=self.request.user, photo=file_url)
+        else:
+            serializer.save(photo=file_url)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -77,3 +83,8 @@ class NearbyVendorsView(APIView):
 
         serializer = VendorSerializer(nearby, many=True)
         return Response(serializer.data)
+
+
+def add_vendor_page(request):
+    """Page HTML pour ajouter un vendeur"""
+    return render(request, 'vendors/add_vendor.html')
