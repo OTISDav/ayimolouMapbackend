@@ -15,8 +15,10 @@ class VendorSerializer(serializers.ModelSerializer):
 
     def get_distance(self, obj):
         # affichage optionnel : ajouté dans la vue si la distance est calculée
-        return getattr(obj, "distance", None)
-
+        distance = getattr(obj, "distance", None)
+        if distance is not None:
+            return f"{distance:.2f} km"
+        return None
     def get_photo(self, obj):
         if obj.photo:
             # si tu gardes resource_type="raw", on retire "raw/upload/" pour avoir l'URL complète
